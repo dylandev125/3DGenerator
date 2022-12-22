@@ -137,7 +137,13 @@
 			mintBtn.className = 'btn-mint custom-button';
 			mintBtn.id = "mint_nft";
 			mintBtn.textContent = 'Create NFT';
-			mintModal.appendChild(mintBtn)
+
+			const spinner = document.createElement('div');
+			spinner.className = "loading";
+			spinner.id = "loading";
+
+			mintModal.appendChild(spinner);
+			mintModal.appendChild(mintBtn);
 
 			document.body.appendChild(mintModal);
 

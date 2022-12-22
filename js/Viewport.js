@@ -685,6 +685,21 @@ render();
 
 	signals.cameraResetted.add( updateAspectRatio );
 
+	signals.mintLoading.add ( function ( isLoad ) {
+		const mintBtn = document.getElementById("mint_nft");
+		const spinner = document.getElementById("loading");
+		if(isLoad) {
+			mintBtn.innerHTML = " ";
+			spinner.style.visibility = "visible";
+
+		}
+		else {
+			mintBtn.innerHTML = "Create NFT";
+			spinner.style.visibility = "hidden";
+		}
+render();
+	} );
+
 	// animations
 
 	let prevActionsInUse = 0;

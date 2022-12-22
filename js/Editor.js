@@ -93,6 +93,8 @@ function Editor() {
 
 		intersectionsDetected: new Signal(),
 
+		mintLoading: new Signal(),
+
 	};
 
 	this.config = new Config();

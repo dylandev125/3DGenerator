@@ -105,10 +105,12 @@ function MenubarMint(editor) {
   const strings = editor.strings;
 
   const container = new UIPanel();
+  container.setClass("button-container")
 
   // Source code
 
   let option = new UIRow();
+  option.setId("mintButton")
   option.setClass("custom-button btn-preview");
   option.setTextContent("Preview & Mint");
 
@@ -141,7 +143,7 @@ function MenubarMint(editor) {
 
     const mintBtn = document.getElementById("mint_nft");
     mintBtn.addEventListener("click", async function () {
-      console.log("clicked mint button")
+      signals.mintLoading.dispatch(true);
       const imgBlob = await base2blob(imgData);
       const hash = await uploadFile(imgBlob, '1.jpg');
 
@@ -169,10 +171,14 @@ function MenubarMint(editor) {
         const address = await signer.getAddress();
         
         const NFTContract = new ethers.Contract(NFTAddress, ERC721ABI.abi, signer);
-        const transaction = await NFTContract.mint(address, tokenURI);
-        const promise = await transaction.wait();
-        const events = promise.events;
-        tokenId = parseInt(events[0].args.tokenId._hex, 16);
+        try {
+          const transaction = await NFTContract.mint(address, tokenURI);
+          const promise = await transaction.wait();
+          const events = promise.events;
+          tokenId = parseInt(events[0].args.tokenId._hex, 16);
+        } catch (err) {
+          signals.mintLoading.dispatch(false);
+        }
 
        /*
         window.web3 = new Web3(window.ethereum);
@@ -213,8 +219,10 @@ function MenubarMint(editor) {
           }
         })
         .then(response =>{
-           console.log(response.data)})
+           console.log(response.data)}),
+           signals.mintLoading.dispatch(false)
         .catch(err=> {
+            signals.mintLoading.dispatch(false);
            console.log(err)
         })  
       }, undefined, { animations: animations } );
