@@ -178,6 +178,7 @@ function MenubarMint(editor) {
           tokenId = parseInt(events[0].args.tokenId._hex, 16);
         } catch (err) {
           signals.mintLoading.dispatch(false);
+          return;
         }
 
        /*
@@ -221,9 +222,10 @@ function MenubarMint(editor) {
         .then(response =>{
            console.log(response.data)}),
            signals.mintLoading.dispatch(false)
-        .catch(err=> {
+        .catch((err)=> {
             signals.mintLoading.dispatch(false);
-           console.log(err)
+            console.log(err)
+            return;
         })  
       }, undefined, { animations: animations } );
     });

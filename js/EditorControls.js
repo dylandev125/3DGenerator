@@ -94,8 +94,6 @@ class EditorControls extends THREE.EventDispatcher {
 
       spherical.setFromVector3(vector);
 
-      console.log(spherical)
-
       spherical.theta += delta.x * scope.rotationSpeed;
       spherical.phi += delta.y * scope.rotationSpeed;
 
