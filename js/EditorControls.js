@@ -94,8 +94,12 @@ class EditorControls extends THREE.EventDispatcher {
 
       spherical.setFromVector3(vector);
 
+      console.log(spherical)
+
       spherical.theta += delta.x * scope.rotationSpeed;
       spherical.phi += delta.y * scope.rotationSpeed;
+
+      if (spherical.phi >= 1.5) return;
 
       spherical.makeSafe();
 
@@ -178,8 +182,8 @@ class EditorControls extends THREE.EventDispatcher {
 
       if (state === STATE.ROTATE) {
         scope.rotate(delta.set(-movementX, -movementY, 0));
-      } else if (state === STATE.ZOOM) {
-        scope.zoom(delta.set(0, 0, movementY));
+      // } else if (state === STATE.ZOOM) {
+      //   scope.zoom(delta.set(0, 0, movementY));
       } else if (state === STATE.PAN) {
         scope.pan(delta.set(-movementX, movementY, 0));
       }
