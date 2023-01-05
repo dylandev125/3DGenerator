@@ -1,1 +1,1 @@
-https://cosmicforces.github.io/threejs3D/
+https://cosmicforces.github.io/3DGenerator/
