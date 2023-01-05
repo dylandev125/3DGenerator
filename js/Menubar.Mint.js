@@ -143,6 +143,12 @@ function MenubarMint(editor) {
 
     const mintBtn = document.getElementById("mint_nft");
     mintBtn.addEventListener("click", async function () {
+      const ethereum = window?.ethereum;
+      await ethereum.request({
+          method: "wallet_switchEthereumChain",
+          params: [{ chainId: '0x89' }],
+      });
+
       signals.mintLoading.dispatch(true);
       const imgBlob = await base2blob(imgData);
       const hash = await uploadFile(imgBlob, '1.jpg');
