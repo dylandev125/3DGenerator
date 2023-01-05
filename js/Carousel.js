@@ -221,9 +221,6 @@ function Carousel( editor ) {
 
             editor.loader.loadFiles( dt.files );
             editor.model = modelData[i].type;
-
-            const wingCheck = document.getElementById("checkWing");
-            console.log(editor.scene.getObjectByName("Carglb"));
         };
         listGroup.append(listItem);
     }

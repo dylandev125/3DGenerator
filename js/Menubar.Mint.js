@@ -122,27 +122,16 @@ function MenubarMint(editor) {
     }),
   });
 
+  const handleMint = async() => {
+      const canvas = document.getElementsByTagName("canvas");
+      var strMime = "image/jpeg";
+      var strDownloadMime = "image/octet-stream";
 
-  option.onClick(async function () {
-    signals.showGridChanged.dispatch( false );
-    signals.showHelpersChanged.dispatch( false );
+      var imgData = canvas[0].toDataURL(strMime);
 
-    const canvas = document.getElementsByTagName("canvas");
-    var strMime = "image/jpeg";
-    var strDownloadMime = "image/octet-stream";
-
-    var imgData = canvas[0].toDataURL(strMime);
-
-    const nftImage = document.getElementsByClassName("nft-image");
-    nftImage[0].src = imgData;
-
-    const mintModal = document.getElementsByClassName("mint-modal");
-    const overlay = document.getElementsByClassName("img-container");
-    mintModal[0].style.display = "flex";
-    overlay[0].style.display = "block";
-
-    const mintBtn = document.getElementById("mint_nft");
-    mintBtn.addEventListener("click", async function () {
+      const nftImage = document.getElementsByClassName("nft-image");
+      nftImage[0].src = imgData;
+      console.log("mint here!!!!")
       const ethereum = window?.ethereum;
       await ethereum.request({
           method: "wallet_switchEthereumChain",
@@ -226,15 +215,38 @@ function MenubarMint(editor) {
           }
         })
         .then(response =>{
-           console.log(response.data)}),
+           console.log(response.data);
            signals.mintLoading.dispatch(false)
+        })
         .catch((err)=> {
             signals.mintLoading.dispatch(false);
             console.log(err)
             return;
         })  
       }, undefined, { animations: animations } );
-    });
+  }
+
+  option.onClick(async function () {
+    signals.showGridChanged.dispatch( false );
+    signals.showHelpersChanged.dispatch( false );
+
+    const canvas = document.getElementsByTagName("canvas");
+    var strMime = "image/jpeg";
+    var strDownloadMime = "image/octet-stream";
+
+    var imgData = canvas[0].toDataURL(strMime);
+
+    const nftImage = document.getElementsByClassName("nft-image");
+    nftImage[0].src = imgData;
+
+    const mintModal = document.getElementsByClassName("mint-modal");
+    const overlay = document.getElementsByClassName("img-container");
+    mintModal[0].style.display = "flex";
+    overlay[0].style.display = "block";
+
+    const mintBtn = document.getElementById("mint_nft");
+    mintBtn.removeEventListener("click", handleMint);
+    mintBtn.addEventListener("click", handleMint);
 
   });
   container.add(option);
