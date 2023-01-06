@@ -96,6 +96,7 @@ render();
 
 	} );
 	transformControls.addEventListener( 'mouseDown', function () {
+		console.log("asdf")
 		const object = transformControls.object;
 
 		objectPositionOnDown = object.position.clone();

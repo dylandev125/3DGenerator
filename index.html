@@ -142,8 +142,17 @@
 			spinner.className = "loading";
 			spinner.id = "loading";
 
+			const dashboardLink = document.createElement('a');
+			dashboardLink.className = "dashboard-link";
+			dashboardLink.id = "Dashboard_link";
+			dashboardLink.href = "#";
+			dashboardLink.target = "_blank";
+			
+			dashboardLink.textContent = "Go to dashboard";
+
 			mintModal.appendChild(spinner);
 			mintModal.appendChild(mintBtn);
+			mintModal.appendChild(dashboardLink);
 
 			document.body.appendChild(mintModal);
 

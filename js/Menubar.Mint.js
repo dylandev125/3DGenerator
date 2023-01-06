@@ -131,7 +131,6 @@ function MenubarMint(editor) {
 
       const nftImage = document.getElementsByClassName("nft-image");
       nftImage[0].src = imgData;
-      console.log("mint here!!!!")
       const ethereum = window?.ethereum;
       await ethereum.request({
           method: "wallet_switchEthereumChain",
@@ -216,7 +215,10 @@ function MenubarMint(editor) {
         })
         .then(response =>{
            console.log(response.data);
-           signals.mintLoading.dispatch(false)
+           signals.mintLoading.dispatch(false);
+          //  const linkTo = document.getElementById("Dashboard_link");
+          //  linkTo.style.display = "block";
+          //  linkTo.href = "https://crooze-dashboard.netlify.app";
         })
         .catch((err)=> {
             signals.mintLoading.dispatch(false);

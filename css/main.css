@@ -1110,6 +1110,15 @@ select {
 	box-shadow: rgba(20, 223, 53, 0.75) 1.3em 0 0 0, rgba(20, 223, 53, 0.75) 0.9em 0.9em 0 0, rgba(20, 223, 53, 0.75) 0 1.3em 0 0, rgba(20, 223, 53, 0.75) -0.9em 0.9em 0 0, rgba(20, 223, 53, 0.75) -1.3em 0 0 0, rgba(20, 223, 53, 0.75) -0.9em -0.9em 0 0, rgba(20, 223, 53, 0.75) 0 -1.3em 0 0, rgba(20, 223, 53, 0.75) 0.9em -0.9em 0 0;
   }
 
+  .dashboard-link {
+	display: none;
+	color: white;
+	font-size: 18px;
+	transition: 0.2s;
+  }
+  .dashboard-link:hover {
+	color: rgb(34, 189, 93);
+  }
 /* */
 
 @media ( max-width: 1600px ) {
