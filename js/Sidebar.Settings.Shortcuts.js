@@ -107,12 +107,12 @@ function SidebarSettingsShortcuts( editor ) {
 
 			case 'delete':
 
-				const object = editor.selected;
+				// const object = editor.selected;
 
-				if ( object === null ) return;
+				// if ( object === null ) return;
 
-				const parent = object.parent;
-				if ( parent !== null ) editor.execute( new RemoveObjectCommand( editor, object ) );
+				// const parent = object.parent;
+				// if ( parent !== null ) editor.execute( new RemoveObjectCommand( editor, object ) );
 
 				break;
 

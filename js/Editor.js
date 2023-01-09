@@ -226,23 +226,23 @@ Editor.prototype = {
 
 	removeObject: function ( object ) {
 
-		// if ( object.parent === null ) return; // avoid deleting the camera or scene
+		if ( object.parent === null ) return; // avoid deleting the camera or scene
 
-		// var scope = this;
+		var scope = this;
 
-		// object.traverse( function ( child ) {
+		object.traverse( function ( child ) {
 
-		// 	scope.removeCamera( child );
-		// 	scope.removeHelper( child );
+			scope.removeCamera( child );
+			scope.removeHelper( child );
 
-		// 	if ( child.material !== undefined ) scope.removeMaterial( child.material );
+			if ( child.material !== undefined ) scope.removeMaterial( child.material );
 
-		// } );
+		} );
 
-		// object.parent.remove( object );
+		object.parent.remove( object );
 
-		// this.signals.objectRemoved.dispatch( object );
-		// this.signals.sceneGraphChanged.dispatch();
+		this.signals.objectRemoved.dispatch( object );
+		this.signals.sceneGraphChanged.dispatch();
 
 	},
 
