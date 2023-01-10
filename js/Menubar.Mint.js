@@ -189,15 +189,76 @@ function MenubarMint(editor) {
           value: '0',
           data: extraData.encodeABI()
         });
-*/
+        */
       }
 
-      console.log(tokenId);
-      
       const scene = editor.scene;
       const animations = getAnimations( scene );
       const { GLTFExporter } = await import( 'three/addons/exporters/GLTFExporter.js' );
       const exporter = new GLTFExporter();
+
+      const wheelSelect = document.getElementById("wheel_select");
+      const wheels_obj = scene.getObjectByName("Carglb");
+
+      let wheel_fl1 = wheels_obj.getObjectByName('Wheels_01_FL');
+      let wheel_fr1 = wheels_obj.getObjectByName('Wheels_01_FR');
+      let wheel_rl1 = wheels_obj.getObjectByName('Wheels_01_RL');
+      let wheel_rr1 = wheels_obj.getObjectByName('Wheels_01_RR');
+  
+      let wheel_fl2 = wheels_obj.getObjectByName('Wheels_02_FL');
+      let wheel_fr2 = wheels_obj.getObjectByName('Wheels_02_FR');
+      let wheel_rl2 = wheels_obj.getObjectByName('Wheels_02_RL');
+      let wheel_rr2 = wheels_obj.getObjectByName('Wheels_02_RR');
+  
+      let wheel_fl3 = wheels_obj.getObjectByName('Wheels_03_FL');
+      let wheel_fr3 = wheels_obj.getObjectByName('Wheels_03_FR');
+      let wheel_rl3 = wheels_obj.getObjectByName('Wheels_03_RL');
+      let wheel_rr3 = wheels_obj.getObjectByName('Wheels_03_RR');
+
+      if( wheelSelect.value === '0' ) {
+
+        wheel_fl2.parent.remove(wheel_fl2);
+        wheel_fl3.parent.remove(wheel_fl3);
+  
+        wheel_fr2.parent.remove(wheel_fr2);
+        wheel_fr3.parent.remove(wheel_fr3);
+  
+        wheel_rl2.parent.remove(wheel_rl2);
+        wheel_rl3.parent.remove(wheel_rl3);
+  
+        wheel_rr2.parent.remove(wheel_rr2);
+        wheel_rr3.parent.remove(wheel_rr3);
+      }
+  
+      else if( wheelSelect.value === '1' ) {
+
+        wheel_fl1.parent.remove(wheel_fl1);
+        wheel_fl3.parent.remove(wheel_fl3);
+  
+        wheel_fr1.parent.remove(wheel_fr1);
+        wheel_fr3.parent.remove(wheel_fr3);
+  
+        wheel_rl1.parent.remove(wheel_rl1);
+        wheel_rl3.parent.remove(wheel_rl3);
+  
+        wheel_rr1.parent.remove(wheel_rr1);
+        wheel_rr3.parent.remove(wheel_rr3);
+      }
+  
+      else if( wheelSelect.value === '2' ) {
+
+        wheel_fl1.parent.remove(wheel_fl1);
+        wheel_fl2.parent.remove(wheel_fl2);
+  
+        wheel_fr1.parent.remove(wheel_fr1);
+        wheel_fr2.parent.remove(wheel_fr2);
+  
+        wheel_rl1.parent.remove(wheel_rl1);
+        wheel_rl2.parent.remove(wheel_rl2);
+  
+        wheel_rr1.parent.remove(wheel_rr1);
+        wheel_rr2.parent.remove(wheel_rr2);
+      }      
       
       exporter.parse( scene, async function ( result ) {
   
@@ -214,7 +275,6 @@ function MenubarMint(editor) {
           }
         })
         .then(response =>{
-           console.log(response.data);
            signals.mintLoading.dispatch(false);
           //  const linkTo = document.getElementById("Dashboard_link");
           //  linkTo.style.display = "block";
@@ -234,7 +294,6 @@ function MenubarMint(editor) {
 
     const canvas = document.getElementsByTagName("canvas");
     var strMime = "image/jpeg";
-    var strDownloadMime = "image/octet-stream";
 
     var imgData = canvas[0].toDataURL(strMime);
 
