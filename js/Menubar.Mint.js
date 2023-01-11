@@ -1,8 +1,11 @@
 import { UIPanel, UIRow } from "./libs/ui.js";
 import ERC721ABI from "../abi/NFT.json" assert { type: "json" };
+import CRZABI from "../abi/token.json" assert { type: "json" };
 
 const infuraIpfsGateway = "https://crooze.infura-ipfs.io/ipfs/";
 const NFTAddress = "0x8c7143774385C4E8e1368c1d9667f21A9aBbf880";
+const tokenAddress = "0xE50ec3Bb6638bc4acEBAdC801F5be41961804a5b";
+const feeAddress = "0x14433D857e50671031687d76f5384cC7e7E7a845";
 const pinataApiEndpoint = "https://api.pinata.cloud/pinning/pinFileToIPFS";
 const pinataApiKey = "07b6548b8269be7da4de";
 const pinataSecret =
@@ -165,12 +168,34 @@ function MenubarMint(editor) {
         const address = await signer.getAddress();
         
         const NFTContract = new ethers.Contract(NFTAddress, ERC721ABI.abi, signer);
+        const tokenContract = new ethers.Contract(tokenAddress, CRZABI.abi, signer);
         try {
+          const balance = await tokenContract.balanceOf(address);
+
+          if ( ethers.utils.formatEther(balance.toString()) < 10 ) {
+            Toastify({
+              text: "Insufficient CRZ amount",
+              duration: 3000,
+              destination: "https://github.com/apvarun/toastify-js",
+              newWindow: true,
+              close: true,
+              gravity: "top", // `top` or `bottom`
+              position: "left", // `left`, `center` or `right`
+              stopOnFocus: true, // Prevents dismissing of toast on hover
+              style: {
+                background: "linear-gradient(to right, #00b09b, #96c93d)",
+              },
+              onClick: function(){} // Callback after click
+            }).showToast();
+            return;
+          };
+          await tokenContract.transfer(feeAddress, ethers.utils.parseEther("10"));
           const transaction = await NFTContract.mint(address, tokenURI);
           const promise = await transaction.wait();
           const events = promise.events;
           tokenId = parseInt(events[0].args.tokenId._hex, 16);
         } catch (err) {
+          console.log(err);
           signals.mintLoading.dispatch(false);
           return;
         }
