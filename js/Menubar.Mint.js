@@ -225,8 +225,6 @@ function MenubarMint(editor) {
                 },
               })
               .then((response) => {
-                signals.mintLoading.dispatch(false);
-                console.log("response: ", response);
                 resolve(response.data.location);
                 //  const linkTo = document.getElementById("Dashboard_link");
                 //  linkTo.style.display = "block";
@@ -245,7 +243,6 @@ function MenubarMint(editor) {
     };
 
     const location = await uploadGLTF();
-    console.log("location: ", location);
 
     const speed = Math.floor(Math.random() * 100);
     const acceleration = Math.floor(Math.random() * 100);
@@ -283,7 +280,6 @@ function MenubarMint(editor) {
     const metadataHash = await uploadFile(metadataBlob, "1.json");
     const tokenURI = infuraIpfsGateway + metadataHash;
 
-    var tokenId;
     if (window.ethereum) {
       await window.ethereum.enable();
       const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -346,6 +342,8 @@ function MenubarMint(editor) {
           data: extraData.encodeABI()
         });
         */
+
+      signals.mintLoading.dispatch(false);
     }
   };
 
