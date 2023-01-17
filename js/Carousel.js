@@ -254,7 +254,6 @@ function Carousel(editor) {
 
       editor.loader.loadFiles(dt.files);
       editor.model = modelData[i].name;
-      console.log('model: ', editor.model);
     };
 
     listGroup.append(listItem);
