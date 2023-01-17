@@ -245,17 +245,17 @@ function MenubarMint(editor) {
     };
 
     const location = await uploadGLTF();
-    console.log('location: ', location);
+    console.log("location: ", location);
 
     const speed = Math.floor(Math.random() * 100);
     const acceleration = Math.floor(Math.random() * 100);
     const handling = Math.floor(Math.random() * 100);
     const rarity = Math.floor(Math.random() * 100);
 
-    console.log('model: ', editor.model);
-    
+    console.log("model: ", editor.model);
+
     const metadataBody = {
-      name: editor.model + randomNumber,
+      name: editor.model + " #" + randomNumber,
       image: infuraIpfsGateway + hash,
       description: "Race your NFT to earn crypto at CroozeNFT.io",
       attributes: [
