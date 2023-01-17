@@ -252,8 +252,6 @@ function MenubarMint(editor) {
     const handling = Math.floor(Math.random() * 100);
     const rarity = Math.floor(Math.random() * 100);
 
-    console.log("model: ", editor.model);
-
     const metadataBody = {
       name: editor.model + " #" + randomNumber,
       image: infuraIpfsGateway + hash,
@@ -352,6 +350,9 @@ function MenubarMint(editor) {
   };
 
   option.onClick(async function () {
+    console.log("model: ", editor.model);
+    if (!editor.model) return;
+
     signals.showGridChanged.dispatch(false);
     signals.showHelpersChanged.dispatch(false);
 
