@@ -11,11 +11,6 @@ const pinataApiKey = "07b6548b8269be7da4de";
 const pinataSecret =
   "9ba00e678abb79229cf7bafe0f98c9ab9b0aa9b733e04886bfa7e41a5b56efb1";
 
-const speed = Math.floor(Math.random() * 100);
-const acceleration = Math.floor(Math.random() * 100);
-const handling = Math.floor(Math.random() * 100);
-const rarity = Math.floor(Math.random() * 100);
-
 // const horsePower = Math.random();
 // const aeroDynamics = Math.random();
 // const airResistance = Math.random();
@@ -108,12 +103,12 @@ function MenubarMint(editor) {
   const strings = editor.strings;
 
   const container = new UIPanel();
-  container.setClass("button-container")
+  container.setClass("button-container");
 
   // Source code
 
   let option = new UIRow();
-  option.setId("mintButton")
+  option.setId("mintButton");
   option.setClass("custom-button btn-preview");
   option.setTextContent("Preview & Mint");
 
@@ -125,82 +120,217 @@ function MenubarMint(editor) {
     }),
   });
 
-  const handleMint = async() => {
-      const canvas = document.getElementsByTagName("canvas");
-      var strMime = "image/jpeg";
-      var strDownloadMime = "image/octet-stream";
+  const handleMint = async () => {
+    const randomNumber = new Date().getTime().toString();
 
-      var imgData = canvas[0].toDataURL(strMime);
+    const canvas = document.getElementsByTagName("canvas");
+    var strMime = "image/jpeg";
+    var strDownloadMime = "image/octet-stream";
 
-      const nftImage = document.getElementsByClassName("nft-image");
-      nftImage[0].src = imgData;
-      const ethereum = window?.ethereum;
-      await ethereum.request({
-          method: "wallet_switchEthereumChain",
-          params: [{ chainId: '0x89' }],
+    var imgData = canvas[0].toDataURL(strMime);
+
+    const nftImage = document.getElementsByClassName("nft-image");
+    nftImage[0].src = imgData;
+    const ethereum = window?.ethereum;
+    await ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: "0x89" }],
+    });
+
+    signals.mintLoading.dispatch(true);
+    const imgBlob = await base2blob(imgData);
+    const hash = await uploadFile(imgBlob, "1.jpg");
+
+    const scene = editor.scene;
+    const animations = getAnimations(scene);
+    const { GLTFExporter } = await import(
+      "three/addons/exporters/GLTFExporter.js"
+    );
+    const exporter = new GLTFExporter();
+
+    const wheelSelect = document.getElementById("wheel_select");
+    const wheels_obj = scene.getObjectByName("Carglb");
+
+    let wheel_fl1 = wheels_obj.getObjectByName("Wheels_01_FL");
+    let wheel_fr1 = wheels_obj.getObjectByName("Wheels_01_FR");
+    let wheel_rl1 = wheels_obj.getObjectByName("Wheels_01_RL");
+    let wheel_rr1 = wheels_obj.getObjectByName("Wheels_01_RR");
+
+    let wheel_fl2 = wheels_obj.getObjectByName("Wheels_02_FL");
+    let wheel_fr2 = wheels_obj.getObjectByName("Wheels_02_FR");
+    let wheel_rl2 = wheels_obj.getObjectByName("Wheels_02_RL");
+    let wheel_rr2 = wheels_obj.getObjectByName("Wheels_02_RR");
+
+    let wheel_fl3 = wheels_obj.getObjectByName("Wheels_03_FL");
+    let wheel_fr3 = wheels_obj.getObjectByName("Wheels_03_FR");
+    let wheel_rl3 = wheels_obj.getObjectByName("Wheels_03_RL");
+    let wheel_rr3 = wheels_obj.getObjectByName("Wheels_03_RR");
+
+    if (wheelSelect.value === "0") {
+      wheel_fl2.parent.remove(wheel_fl2);
+      wheel_fl3.parent.remove(wheel_fl3);
+
+      wheel_fr2.parent.remove(wheel_fr2);
+      wheel_fr3.parent.remove(wheel_fr3);
+
+      wheel_rl2.parent.remove(wheel_rl2);
+      wheel_rl3.parent.remove(wheel_rl3);
+
+      wheel_rr2.parent.remove(wheel_rr2);
+      wheel_rr3.parent.remove(wheel_rr3);
+    } else if (wheelSelect.value === "1") {
+      wheel_fl1.parent.remove(wheel_fl1);
+      wheel_fl3.parent.remove(wheel_fl3);
+
+      wheel_fr1.parent.remove(wheel_fr1);
+      wheel_fr3.parent.remove(wheel_fr3);
+
+      wheel_rl1.parent.remove(wheel_rl1);
+      wheel_rl3.parent.remove(wheel_rl3);
+
+      wheel_rr1.parent.remove(wheel_rr1);
+      wheel_rr3.parent.remove(wheel_rr3);
+    } else if (wheelSelect.value === "2") {
+      wheel_fl1.parent.remove(wheel_fl1);
+      wheel_fl2.parent.remove(wheel_fl2);
+
+      wheel_fr1.parent.remove(wheel_fr1);
+      wheel_fr2.parent.remove(wheel_fr2);
+
+      wheel_rl1.parent.remove(wheel_rl1);
+      wheel_rl2.parent.remove(wheel_rl2);
+
+      wheel_rr1.parent.remove(wheel_rr1);
+      wheel_rr2.parent.remove(wheel_rr2);
+    }
+
+    const uploadGLTF = async () => {
+      return new Promise((resolve, reject) => {
+        exporter.parse(
+          scene,
+          async function (result) {
+            const blob = new Blob([JSON.stringify(result, null, 2)], {
+              type: "text/plain",
+            });
+            const filename = randomNumber + ".gltf";
+
+            const formData = new FormData();
+            formData.append("file", blob, filename);
+            formData.append("id", randomNumber);
+
+            axios
+              .post("https://notify.croozenft.io/v1/s3upload", formData, {
+                headers: {
+                  "Content-Type": `multipart/form-data`,
+                },
+              })
+              .then((response) => {
+                signals.mintLoading.dispatch(false);
+                console.log("response: ", response);
+                resolve(response.location);
+                //  const linkTo = document.getElementById("Dashboard_link");
+                //  linkTo.style.display = "block";
+                //  linkTo.href = "https://crooze-dashboard.netlify.app";
+              })
+              .catch((err) => {
+                signals.mintLoading.dispatch(false);
+                console.log(err);
+                return;
+              });
+          },
+          undefined,
+          { animations: animations }
+        );
       });
+    };
 
-      signals.mintLoading.dispatch(true);
-      const imgBlob = await base2blob(imgData);
-      const hash = await uploadFile(imgBlob, '1.jpg');
+    const location = await uploadGLTF();
 
-      const metadataBody = {
-        name: 'model1',
-        image: infuraIpfsGateway + hash,
-        description: "description",
-        attributes: {
-          speed,
-          acceleration,
-          handling,
-          rarity,
+    const speed = Math.floor(Math.random() * 100);
+    const acceleration = Math.floor(Math.random() * 100);
+    const handling = Math.floor(Math.random() * 100);
+    const rarity = Math.floor(Math.random() * 100);
+
+    const metadataBody = {
+      name: editor.model + randomNumber,
+      image: infuraIpfsGateway + hash,
+      description: "Race your NFT to earn crypto at CroozeNFT.io",
+      attributes: [
+        { display_type: "boost_percentage", trait_type: "Speed", value: speed },
+        {
+          display_type: "boost_percentage",
+          trait_type: "Acceleration",
+          value: acceleration,
         },
-      };
+        {
+          display_type: "boost_percentage",
+          trait_type: "Handling",
+          value: handling,
+        },
+        {
+          display_type: "boost_percentage",
+          trait_type: "Rarity",
+          value: rarity,
+        },
+      ],
+      animation_url: location,
+    };
 
-      const metadataBlob = new Blob( [JSON.stringify( metadataBody, null, 2 )], { type: 'text/plain' });
-      const metadataHash = await uploadFile(metadataBlob, '1.json');
-      const tokenURI = infuraIpfsGateway + metadataHash;
+    const metadataBlob = new Blob([JSON.stringify(metadataBody, null, 2)], {
+      type: "text/plain",
+    });
+    const metadataHash = await uploadFile(metadataBlob, "1.json");
+    const tokenURI = infuraIpfsGateway + metadataHash;
 
-      var tokenId;
-      if (window.ethereum) {
-        await window.ethereum.enable()
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = provider.getSigner();
-        const address = await signer.getAddress();
-        
-        const NFTContract = new ethers.Contract(NFTAddress, ERC721ABI.abi, signer);
-        const tokenContract = new ethers.Contract(tokenAddress, CRZABI.abi, signer);
-        try {
-          const balance = await tokenContract.balanceOf(address);
+    var tokenId;
+    if (window.ethereum) {
+      await window.ethereum.enable();
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const address = await signer.getAddress();
 
-          if ( ethers.utils.formatEther(balance.toString()) < 10 ) {
-            Toastify({
-              text: "Insufficient CRZ amount",
-              duration: 3000,
-              destination: "https://github.com/apvarun/toastify-js",
-              newWindow: true,
-              close: true,
-              gravity: "top", // `top` or `bottom`
-              position: "left", // `left`, `center` or `right`
-              stopOnFocus: true, // Prevents dismissing of toast on hover
-              style: {
-                background: "linear-gradient(to right, #00b09b, #96c93d)",
-              },
-              onClick: function(){} // Callback after click
-            }).showToast();
-            return;
-          };
-          await tokenContract.transfer(feeAddress, ethers.utils.parseEther("10"));
-          const transaction = await NFTContract.mint(address, tokenURI);
-          const promise = await transaction.wait();
-          const events = promise.events;
-          tokenId = parseInt(events[0].args.tokenId._hex, 16);
-        } catch (err) {
-          console.log(err);
-          signals.mintLoading.dispatch(false);
+      const NFTContract = new ethers.Contract(
+        NFTAddress,
+        ERC721ABI.abi,
+        signer
+      );
+      const tokenContract = new ethers.Contract(
+        tokenAddress,
+        CRZABI.abi,
+        signer
+      );
+      try {
+        const balance = await tokenContract.balanceOf(address);
+
+        if (ethers.utils.formatEther(balance.toString()) < 10) {
+          Toastify({
+            text: "Insufficient CRZ amount",
+            duration: 3000,
+            destination: "https://github.com/apvarun/toastify-js",
+            newWindow: true,
+            close: true,
+            gravity: "top", // `top` or `bottom`
+            position: "left", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+            onClick: function () {}, // Callback after click
+          }).showToast();
           return;
         }
+        await tokenContract.transfer(feeAddress, ethers.utils.parseEther("10"));
+        const transaction = await NFTContract.mint(address, tokenURI);
+        const promise = await transaction.wait();
+        const events = promise.events;
+        tokenId = parseInt(events[0].args.tokenId._hex, 16);
+      } catch (err) {
+        console.log(err);
+        signals.mintLoading.dispatch(false);
+        return;
+      }
 
-       /*
+      /*
         window.web3 = new Web3(window.ethereum);
         await window.ethereum.enable();
         const accounts = await web3.eth.requestAccounts();
@@ -215,107 +345,12 @@ function MenubarMint(editor) {
           data: extraData.encodeABI()
         });
         */
-      }
-
-      const scene = editor.scene;
-      const animations = getAnimations( scene );
-      const { GLTFExporter } = await import( 'three/addons/exporters/GLTFExporter.js' );
-      const exporter = new GLTFExporter();
-
-      const wheelSelect = document.getElementById("wheel_select");
-      const wheels_obj = scene.getObjectByName("Carglb");
-
-      let wheel_fl1 = wheels_obj.getObjectByName('Wheels_01_FL');
-      let wheel_fr1 = wheels_obj.getObjectByName('Wheels_01_FR');
-      let wheel_rl1 = wheels_obj.getObjectByName('Wheels_01_RL');
-      let wheel_rr1 = wheels_obj.getObjectByName('Wheels_01_RR');
-  
-      let wheel_fl2 = wheels_obj.getObjectByName('Wheels_02_FL');
-      let wheel_fr2 = wheels_obj.getObjectByName('Wheels_02_FR');
-      let wheel_rl2 = wheels_obj.getObjectByName('Wheels_02_RL');
-      let wheel_rr2 = wheels_obj.getObjectByName('Wheels_02_RR');
-  
-      let wheel_fl3 = wheels_obj.getObjectByName('Wheels_03_FL');
-      let wheel_fr3 = wheels_obj.getObjectByName('Wheels_03_FR');
-      let wheel_rl3 = wheels_obj.getObjectByName('Wheels_03_RL');
-      let wheel_rr3 = wheels_obj.getObjectByName('Wheels_03_RR');
-
-      if( wheelSelect.value === '0' ) {
-
-        wheel_fl2.parent.remove(wheel_fl2);
-        wheel_fl3.parent.remove(wheel_fl3);
-  
-        wheel_fr2.parent.remove(wheel_fr2);
-        wheel_fr3.parent.remove(wheel_fr3);
-  
-        wheel_rl2.parent.remove(wheel_rl2);
-        wheel_rl3.parent.remove(wheel_rl3);
-  
-        wheel_rr2.parent.remove(wheel_rr2);
-        wheel_rr3.parent.remove(wheel_rr3);
-      }
-  
-      else if( wheelSelect.value === '1' ) {
-
-        wheel_fl1.parent.remove(wheel_fl1);
-        wheel_fl3.parent.remove(wheel_fl3);
-  
-        wheel_fr1.parent.remove(wheel_fr1);
-        wheel_fr3.parent.remove(wheel_fr3);
-  
-        wheel_rl1.parent.remove(wheel_rl1);
-        wheel_rl3.parent.remove(wheel_rl3);
-  
-        wheel_rr1.parent.remove(wheel_rr1);
-        wheel_rr3.parent.remove(wheel_rr3);
-      }
-  
-      else if( wheelSelect.value === '2' ) {
-
-        wheel_fl1.parent.remove(wheel_fl1);
-        wheel_fl2.parent.remove(wheel_fl2);
-  
-        wheel_fr1.parent.remove(wheel_fr1);
-        wheel_fr2.parent.remove(wheel_fr2);
-  
-        wheel_rl1.parent.remove(wheel_rl1);
-        wheel_rl2.parent.remove(wheel_rl2);
-  
-        wheel_rr1.parent.remove(wheel_rr1);
-        wheel_rr2.parent.remove(wheel_rr2);
-      }      
-      
-      exporter.parse( scene, async function ( result ) {
-  
-        const blob = new Blob( [JSON.stringify( result, null, 2 )], { type: 'text/plain' });
-        const filename = tokenId + '.gltf';
-
-        const formData = new FormData();
-        formData.append("file", blob, filename);
-        formData.append("id", tokenId);
-
-        axios.post("https://notify.croozenft.com/v1/s3upload", formData, {
-          headers: {
-            "Content-Type": `multipart/form-data`,
-          }
-        })
-        .then(response =>{
-           signals.mintLoading.dispatch(false);
-          //  const linkTo = document.getElementById("Dashboard_link");
-          //  linkTo.style.display = "block";
-          //  linkTo.href = "https://crooze-dashboard.netlify.app";
-        })
-        .catch((err)=> {
-            signals.mintLoading.dispatch(false);
-            console.log(err)
-            return;
-        })  
-      }, undefined, { animations: animations } );
-  }
+    }
+  };
 
   option.onClick(async function () {
-    signals.showGridChanged.dispatch( false );
-    signals.showHelpersChanged.dispatch( false );
+    signals.showGridChanged.dispatch(false);
+    signals.showHelpersChanged.dispatch(false);
 
     const canvas = document.getElementsByTagName("canvas");
     var strMime = "image/jpeg";
@@ -333,7 +368,6 @@ function MenubarMint(editor) {
     const mintBtn = document.getElementById("mint_nft");
     mintBtn.removeEventListener("click", handleMint);
     mintBtn.addEventListener("click", handleMint);
-
   });
   container.add(option);
 
@@ -342,30 +376,40 @@ function MenubarMint(editor) {
   option.setTextContent("Upload S3");
 
   option.onClick(async function () {
-      const scene = editor.scene;
-      const animations = getAnimations( scene );
-  
-      const { GLTFExporter } = await import( 'three/addons/exporters/GLTFExporter.js' );
-  
-      const exporter = new GLTFExporter();
-      
-      exporter.parse( scene, async function ( result ) {
-  
+    const scene = editor.scene;
+    const animations = getAnimations(scene);
+
+    const { GLTFExporter } = await import(
+      "three/addons/exporters/GLTFExporter.js"
+    );
+
+    const exporter = new GLTFExporter();
+
+    exporter.parse(
+      scene,
+      async function (result) {
         // saveString( JSON.stringify( result, null, 2 ), 'scene.gltf' );
-        const blob = new Blob( [JSON.stringify( result, null, 2 )], { type: 'text/plain' });
+        const blob = new Blob([JSON.stringify(result, null, 2)], {
+          type: "text/plain",
+        });
 
         const formData = new FormData();
         formData.append("id", 10);
         formData.append("file", blob, "10.gltf");
 
-        axios.post("http://localhost:5000/v1/s3upload", formData)
-        .then(response =>{
-           console.log(response.data)})
-        .catch(err=> {
-           console.log("error")
-     })
-    }, undefined, { animations: animations } );
-  })
+        axios
+          .post("http://localhost:5000/v1/s3upload", formData)
+          .then((response) => {
+            console.log(response.data);
+          })
+          .catch((err) => {
+            console.log("error");
+          });
+      },
+      undefined,
+      { animations: animations }
+    );
+  });
 
   // container.add(option);
 
