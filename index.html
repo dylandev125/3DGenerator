@@ -194,7 +194,6 @@
           if (isLoadingFromHash) return;
 
           if (state !== undefined) {
-            console.log("state: ", state);
             editor.fromJSON(state);
           }
 
@@ -256,10 +255,8 @@
 
         if (event.dataTransfer.items) {
           // DataTransferItemList supports folders
-          console.log("=====222222======", event.dataTransfer.items);
           editor.loader.loadItemList(event.dataTransfer.items);
         } else {
-          console.log("======1111======", event.dataTransfer.files);
           editor.loader.loadFiles(event.dataTransfer.files);
         }
       });

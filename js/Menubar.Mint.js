@@ -350,8 +350,11 @@ function MenubarMint(editor) {
   };
 
   option.onClick(async function () {
-    console.log("model: ", editor.model);
-    if (!editor.model) return;
+    if (!editor.model) {
+      alert("Please select the car model.");
+
+      return;
+    }
 
     signals.showGridChanged.dispatch(false);
     signals.showHelpersChanged.dispatch(false);
