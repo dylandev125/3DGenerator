@@ -227,7 +227,7 @@ function MenubarMint(editor) {
               .then((response) => {
                 signals.mintLoading.dispatch(false);
                 console.log("response: ", response);
-                resolve(response.location);
+                resolve(response.data.location);
                 //  const linkTo = document.getElementById("Dashboard_link");
                 //  linkTo.style.display = "block";
                 //  linkTo.href = "https://crooze-dashboard.netlify.app";
@@ -245,12 +245,15 @@ function MenubarMint(editor) {
     };
 
     const location = await uploadGLTF();
+    console.log('location: ', location);
 
     const speed = Math.floor(Math.random() * 100);
     const acceleration = Math.floor(Math.random() * 100);
     const handling = Math.floor(Math.random() * 100);
     const rarity = Math.floor(Math.random() * 100);
 
+    console.log('model: ', editor.model);
+    
     const metadataBody = {
       name: editor.model + randomNumber,
       image: infuraIpfsGateway + hash,
