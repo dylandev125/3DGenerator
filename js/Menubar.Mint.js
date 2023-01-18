@@ -244,31 +244,45 @@ function MenubarMint(editor) {
 
     const location = await uploadGLTF();
 
-    const speed = Math.floor(Math.random() * 100);
-    const acceleration = Math.floor(Math.random() * 100);
-    const handling = Math.floor(Math.random() * 100);
-    const rarity = Math.floor(Math.random() * 100);
+    const speed = Math.ceil(Math.random() * 100);
+    const acceleration = Math.ceil(Math.random() * 100);
+    const handling = Math.ceil(Math.random() * 100);
+    const rarity = Math.ceil(Math.random() * 100);
+
+    let _rarity = 0;
+    if (rarity > 0 && rarity <= 60) _rarity = 1;
+    else if (rarity > 60 && rarity <= 90) _rarity = 2;
+    else if (rarity > 90 && rarity <= 99) _rarity = 3;
+    else if (rarity > 99) _rarity = 4;
 
     const metadataBody = {
       name: editor.model + " #" + randomNumber,
       image: infuraIpfsGateway + hash,
       description: "Race your NFT to earn crypto at CroozeNFT.io",
       attributes: [
-        { display_type: "boost_percentage", trait_type: "Speed", value: speed },
         {
-          display_type: "boost_percentage",
+          display_type: "number",
+          trait_type: "Speed",
+          value: speed,
+          max_value: 100,
+        },
+        {
+          display_type: "number",
           trait_type: "Acceleration",
           value: acceleration,
+          max_value: 100,
         },
         {
-          display_type: "boost_percentage",
+          display_type: "number",
           trait_type: "Handling",
           value: handling,
+          max_value: 100,
         },
         {
-          display_type: "boost_percentage",
+          display_type: "number",
           trait_type: "Rarity",
-          value: rarity,
+          value: _rarity,
+          max_value: 4,
         },
       ],
       animation_url: location,
