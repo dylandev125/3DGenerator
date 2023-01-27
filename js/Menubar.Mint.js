@@ -256,7 +256,7 @@ function MenubarMint(editor) {
     else if (rarity > 99) _rarity = 4;
 
     const metadataBody = {
-      name: editor.model + " #" + randomNumber,
+      name: editor.model + " #" + randomNumber.slice(-6),
       image: infuraIpfsGateway + hash,
       description: "Race your NFT to earn crypto at CroozeNFT.io",
       attributes: [
