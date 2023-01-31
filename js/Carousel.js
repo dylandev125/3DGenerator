@@ -223,15 +223,23 @@ function Carousel(editor) {
 
     listItem.onclick = async function () {
       const blob = await fetch("./assets/models/" + modelData[i].fileName);
+      const bgBlob = await fetch("./assets/models/bg_plane_4.gltf");
 
       const response = await blob.arrayBuffer();
+      const response2 = await bgBlob.arrayBuffer();
 
       let file = new File([response], modelData[i].fileName, {
         type: blob.headers.get("Content-Type"),
       });
 
+      let bgFile = new File([response2], "bg_plane_4.gltf", {
+        type: bgBlob.headers.get("Content-Type"),
+      });
+
       const dt = new DataTransfer();
       dt.items.add(file);
+      dt.items.add(bgFile);
+      
       editor.clear();
 
       let color = 0xffffff;

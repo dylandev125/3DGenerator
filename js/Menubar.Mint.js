@@ -207,7 +207,7 @@ function MenubarMint(editor) {
     const uploadGLTF = async () => {
       return new Promise((resolve, reject) => {
         exporter.parse(
-          scene,
+          scene.getObjectByName("Carglb"),
           async function (result) {
             const blob = new Blob([JSON.stringify(result, null, 2)], {
               type: "text/plain",
