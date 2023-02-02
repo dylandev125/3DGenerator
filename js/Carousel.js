@@ -253,6 +253,14 @@ function Carousel(editor) {
 
       editor.execute(new AddObjectCommand(editor, light));
 
+      let light2 = new THREE.DirectionalLight(color, intensity);
+      light2.name = "DirectionalLight2";
+      light2.target.name = "DirectionalLight Target2";
+
+      light2.position.set(-10, 10, -15);
+
+      editor.execute(new AddObjectCommand(editor, light2));
+
       color = 0x222222;
 
       light = new THREE.AmbientLight(color);
