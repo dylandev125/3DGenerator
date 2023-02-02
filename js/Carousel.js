@@ -245,19 +245,19 @@ function Carousel(editor) {
       let color = 0xffffff;
       const intensity = 1;
 
-      let light = new THREE.DirectionalLight(color, intensity);
+      let light = new THREE.DirectionalLight(color, 0.4);
       light.name = "DirectionalLight";
       light.target.name = "DirectionalLight Target";
 
-      light.position.set(5, 10, 7.5);
+      light.position.set(18, 31, 28);
 
       editor.execute(new AddObjectCommand(editor, light));
 
-      let light2 = new THREE.DirectionalLight(color, intensity);
+      let light2 = new THREE.DirectionalLight(color, 0.4);
       light2.name = "DirectionalLight2";
       light2.target.name = "DirectionalLight Target2";
 
-      light2.position.set(-10, 10, -15);
+      light2.position.set(-19, 31, -27);
 
       editor.execute(new AddObjectCommand(editor, light2));
 
