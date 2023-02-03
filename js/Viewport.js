@@ -701,6 +701,34 @@ render();
 render();
 	} );
 
+	signals.bgPlaneLoaded.add ( function () {
+		const bgPlane = editor.scene.getObjectByName("Cube");
+		bgPlane.receiveShadow = true;
+render();
+	} );
+
+	signals.modelLoaded.add ( function () {
+		const Carglb = editor.scene.getObjectByName("Carglb");
+		const bonnet = Carglb.getObjectByName("Bonnet");
+		bonnet.castShadow = true;
+
+		const chasis_01 = Carglb.getObjectByName("Chasis_01");
+		chasis_01.castShadow = true;
+		
+		const chasis_frames = Carglb.getObjectByName("Chasis_Frames");
+		chasis_frames.castShadow = true;
+
+		const chasis_underneath = Carglb.getObjectByName("Chasis_Underneath");
+		chasis_underneath.castShadow = true;
+
+		const glass = Carglb.getObjectByName("Glass");
+		glass.castShadow = true;
+
+		const interior = Carglb.getObjectByName("Interior");
+		interior.castShadow = true;
+render();
+	} );
+
 	// animations
 
 	let prevActionsInUse = 0;

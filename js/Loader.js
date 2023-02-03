@@ -15,6 +15,8 @@ function Loader( editor ) {
 
 	this.texturePath = '';
 
+	const signals = editor.signals;
+
 	this.loadItemList = function ( items ) {
 
 		LoaderUtils.getFilesFromItemList( items, function ( files, filesMap ) {
@@ -322,6 +324,13 @@ function Loader( editor ) {
 						scene.animations.push( ...result.animations );
 						editor.execute( new AddObjectCommand( editor, scene ) );
 
+						if (filename === 'bg_plane_4.gltf') {
+							signals.bgPlaneLoaded.dispatch();
+						}
+
+						else {
+							signals.modelLoaded.dispatch();
+						}
 					} );
 
 				}, false );

@@ -90,6 +90,9 @@ function Editor() {
     intersectionsDetected: new Signal(),
 
     mintLoading: new Signal(),
+
+    bgPlaneLoaded: new Signal(),
+    modelLoaded: new Signal(),
   };
 
   this.config = new Config();
