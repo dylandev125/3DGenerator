@@ -147,8 +147,10 @@
       const resizer = new Resizer(editor);
       document.body.appendChild(resizer.dom);
 
+      const sidebarEle = document.getElementById("sidebar");
+
       const carSelecter = new Carousel(editor);
-      document.body.appendChild(carSelecter.dom);
+      sidebarEle.appendChild(carSelecter.dom);
 
       const emptyImgContainer = document.createElement("div");
       emptyImgContainer.classList.add("img-container");

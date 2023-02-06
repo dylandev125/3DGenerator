@@ -21,6 +21,7 @@ import { SidebarSettings } from "./Sidebar.Settings.js";
 import { SidebarAccessory } from "./Sidebar.Accessory.js";
 import { SidebarMaterialColorProperty } from "./Sidebar.Material.ColorProperty.js";
 import { MenubarMint } from "./Menubar.Mint.js";
+import { Carousel } from "./Carousel.js";
 import { AddObjectCommand } from "./commands/AddObjectCommand.js";
 import * as THREE from "three";
 
@@ -53,26 +54,26 @@ function Sidebar(editor) {
   materialColor.setId("material");
   wrapper.add(materialColor);
 
-  const colorWrapper = new UIRow();
-  colorWrapper.dom.className = "Row custom-row";
+  // const colorWrapper = new UIRow();
+  // colorWrapper.dom.className = "Row custom-row";
 
-  const text = new UIText("Background");
-  text.dom.className = "text-white";
+  // const text = new UIText("Background");
+  // text.dom.className = "text-white";
 
-  const backgroundColor = new UIColor()
-    .setValue("#000000")
-    .setMarginLeft("8px")
-    .onInput(onBackgroundChanged);
-  backgroundColor.dom.className = "background-color";
+  // const backgroundColor = new UIColor()
+  //   .setValue("#000000")
+  //   .setMarginLeft("8px")
+  //   .onInput(onBackgroundChanged);
+  // backgroundColor.dom.className = "background-color";
 
-  colorWrapper.add(text);
-  colorWrapper.add(backgroundColor);
+  // colorWrapper.add(text);
+  // colorWrapper.add(backgroundColor);
 
-  backgroundColor.onChange(function () {
-    onBackgroundChanged();
-  });
+  // backgroundColor.onChange(function () {
+  //   onBackgroundChanged();
+  // });
 
-  wrapper.add(colorWrapper);
+  // wrapper.add(colorWrapper);
 
   const gridSwitch = new UIRow();
   gridSwitch.dom.className = "Row custom-row";

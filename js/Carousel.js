@@ -245,23 +245,29 @@ function Carousel(editor) {
       let color = 0xffffff;
       const intensity = 1;
 
-      let light = new THREE.DirectionalLight(color, 0.4);
+      let light = new THREE.DirectionalLight(0xA5CBFD, 0.34);
       light.name = "DirectionalLight";
       light.target.name = "DirectionalLight Target";
 
-      light.position.set(18, 31, 28);
+      light.position.set(5, 10, 7.5);
       // light.castShadow = true;
 
       editor.execute(new AddObjectCommand(editor, light));
 
-      let light2 = new THREE.DirectionalLight(color, 0.4);
+      let light2 = new THREE.DirectionalLight(0x3671E7, 1);
       light2.name = "DirectionalLight2";
       light2.target.name = "DirectionalLight Target2";
       light2.castShadow = true;
-
-      light2.position.set(-19, 31, -27);
-
+      light2.position.set(8.7, 4.7, 7.2);
       editor.execute(new AddObjectCommand(editor, light2));
+
+      let light3 = new THREE.DirectionalLight(0x3E1B69, 1.04);
+      light3.position.set(-7.4, 4.1, 7.5);
+      editor.execute(new AddObjectCommand(editor, light3));
+
+      const ambientLight = new THREE.AmbientLight( 0x222222 ); // soft white light
+      editor.execute(new AddObjectCommand(editor, ambientLight));
+      
 
       editor.loader.loadFiles(dt.files);
       editor.model = modelData[i].name;

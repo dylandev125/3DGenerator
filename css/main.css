@@ -417,17 +417,16 @@ select {
 }
 
 #carousel {
-	position: absolute;
 	bottom: 20px;
 	left: 0;
-	width: calc( 100% - 450px );
+	width: calc( 100% - 100px );
 }
 
 .slider-wrapper {
 	margin: 1rem;
 	position: relative;
 	overflow: hidden;
-	padding: 0px 200px;
+	padding: 0px 50px;
 }
 
 .price-container {
@@ -461,9 +460,9 @@ select {
 	top: 0;
 	bottom: 0;
 	margin: auto;
-	height: 40px;
+	height: 30px;
 	background-color: transparent;
-	width: 5rem;
+	width: 40px;
 	font-size: 3rem;
 	cursor: pointer;
 	transition: 200ms;
@@ -501,7 +500,8 @@ select {
   
   .slide {
 	width: 100%;
-	flex: 1 0 calc(25% - 8px);
+	/* flex: 1 0 calc(25% - 8px); */
+	flex: 1 0 calc(100%);
 	cursor: pointer;
 	display: flex;
 	flex-direction: column;
@@ -517,6 +517,9 @@ select {
   .slide:not(:last-child) {
 	margin-right: 10px;
   }
+  #slide-arrow-prev, #slide-arrow-next {
+	background-size: 20px 10px;
+}
 
 #player {
 	position: absolute;
@@ -1124,7 +1127,8 @@ select {
 @media ( max-width: 1600px ) {
 	.slide {
 		width: 100%;
-		flex: 1 0 calc(33% - 6px);
+		/* flex: 1 0 calc(33% - 6px); */
+		flex: 1 0 calc(100%);
 	}
 }
 
@@ -1348,7 +1352,8 @@ select {
 @media ( max-width: 580px ) {
 	
 	.slide {
-		flex: 1 0 calc(50% - 9px);
+		/* flex: 1 0 calc(50% - 9px); */
+		flex: 1 0 calc(100%);
 	}
 
 	#slide-arrow-prev {
