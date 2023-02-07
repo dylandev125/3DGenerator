@@ -22,8 +22,8 @@ import { SidebarAccessory } from "./Sidebar.Accessory.js";
 import { SidebarMaterialColorProperty } from "./Sidebar.Material.ColorProperty.js";
 import { MenubarMint } from "./Menubar.Mint.js";
 import { Carousel } from "./Carousel.js";
-import { AddObjectCommand } from "./commands/AddObjectCommand.js";
-import * as THREE from "three";
+// import { AddObjectCommand } from "./commands/AddObjectCommand.js";
+// import * as THREE from "three";
 
 function Sidebar(editor) {
   const strings = editor.strings;
@@ -33,6 +33,9 @@ function Sidebar(editor) {
   const container = new UIPanel();
   container.setId("sidebar");
   container.setClass("scrollbar");
+
+  const carSelecter = new Carousel(editor);
+  container.add(carSelecter);
 
   const wrapper = new UIPanel();
 
@@ -53,6 +56,8 @@ function Sidebar(editor) {
   );
   materialColor.setId("material");
   wrapper.add(materialColor);
+
+
 
   // const colorWrapper = new UIRow();
   // colorWrapper.dom.className = "Row custom-row";
