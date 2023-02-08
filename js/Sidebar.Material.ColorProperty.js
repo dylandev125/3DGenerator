@@ -53,6 +53,8 @@ function SidebarMaterialColorProperty( editor, property, name ) {
 		if ( object === null ) return;
 		if ( object.material === undefined ) return;
 
+		if ( object.name === "Cube" ) return;
+
 		material = object.material;
 
 		if ( property in material ) {

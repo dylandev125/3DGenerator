@@ -100,8 +100,6 @@ function MenubarMint(editor) {
     save(new Blob([text], { type: "text/plain" }), filename);
   }
 
-  const strings = editor.strings;
-
   const container = new UIPanel();
   container.setClass("button-container");
 
@@ -111,8 +109,6 @@ function MenubarMint(editor) {
   option.setId("mintButton");
   option.setClass("custom-button btn-preview");
   option.setTextContent("Preview & Mint");
-
-  var bucketName = "my3dmodelbucket";
 
   AWS.config.update({
     credentials: new AWS.CognitoIdentityCredentials({
@@ -125,8 +121,6 @@ function MenubarMint(editor) {
 
     const canvas = document.getElementsByTagName("canvas");
     var strMime = "image/jpeg";
-    var strDownloadMime = "image/octet-stream";
-
     var imgData = canvas[0].toDataURL(strMime);
 
     const nftImage = document.getElementsByClassName("nft-image");
@@ -387,6 +381,7 @@ function MenubarMint(editor) {
     const mintBtn = document.getElementById("mint_nft");
     mintBtn.removeEventListener("click", handleMint);
     mintBtn.addEventListener("click", handleMint);
+
   });
   container.add(option);
 

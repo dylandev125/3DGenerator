@@ -265,18 +265,18 @@ render();
 
 	function onDoubleClick( event ) {
 
-		const array = getMousePosition( container.dom, event.clientX, event.clientY );
-		onDoubleClickPosition.fromArray( array );
+		// const array = getMousePosition( container.dom, event.clientX, event.clientY );
+		// onDoubleClickPosition.fromArray( array );
 
-		const intersects = getIntersects( onDoubleClickPosition );
+		// const intersects = getIntersects( onDoubleClickPosition );
 
-		if ( intersects.length > 0 ) {
+		// if ( intersects.length > 0 ) {
 
-			const intersect = intersects[ 0 ];
+		// 	const intersect = intersects[ 0 ];
 
-			signals.objectFocused.dispatch( intersect.object );
+		// 	signals.objectFocused.dispatch( intersect.object );
 
-		}
+		// }
 
 	}
 
@@ -408,6 +408,8 @@ render();
 		selectionBox.visible = false;
 		transformControls.detach();
 		const mateiralColor = document.getElementById("material");
+		
+		if(object.name === "Cube") return;
 
 		if ( object !== null && object !== scene && object !== camera ) {
 			mateiralColor.style.opacity = 1;
