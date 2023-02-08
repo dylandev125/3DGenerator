@@ -409,7 +409,7 @@ render();
 		transformControls.detach();
 		const mateiralColor = document.getElementById("material");
 		
-		if(object.name === "Cube") return;
+		if(object?.name === "Cube") return;
 
 		if ( object !== null && object !== scene && object !== camera ) {
 			mateiralColor.style.opacity = 1;

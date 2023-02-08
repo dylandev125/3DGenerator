@@ -365,6 +365,14 @@ function MenubarMint(editor) {
     signals.showGridChanged.dispatch(false);
     signals.showHelpersChanged.dispatch(false);
 
+    var _DEFAULT_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.01, 1000);
+    _DEFAULT_CAMERA.name = "Camera";
+    _DEFAULT_CAMERA.position.set(130, 70, 140);
+    _DEFAULT_CAMERA.lookAt(new THREE.Vector3());
+    _DEFAULT_CAMERA.position.normalize().multiplyScalar(15);
+
+    editor.camera.copy(_DEFAULT_CAMERA);
+
     const canvas = document.getElementsByTagName("canvas");
     var strMime = "image/jpeg";
 
@@ -384,48 +392,6 @@ function MenubarMint(editor) {
 
   });
   container.add(option);
-
-  option = new UIRow();
-  option.setClass("custom-row");
-  option.setTextContent("Upload S3");
-
-  option.onClick(async function () {
-    const scene = editor.scene;
-    const animations = getAnimations(scene);
-
-    const { GLTFExporter } = await import(
-      "three/addons/exporters/GLTFExporter.js"
-    );
-
-    const exporter = new GLTFExporter();
-
-    exporter.parse(
-      scene,
-      async function (result) {
-        // saveString( JSON.stringify( result, null, 2 ), 'scene.gltf' );
-        const blob = new Blob([JSON.stringify(result, null, 2)], {
-          type: "text/plain",
-        });
-
-        const formData = new FormData();
-        formData.append("id", 10);
-        formData.append("file", blob, "10.gltf");
-
-        axios
-          .post("http://localhost:5000/v1/s3upload", formData)
-          .then((response) => {
-            console.log(response.data);
-          })
-          .catch((err) => {
-            console.log("error");
-          });
-      },
-      undefined,
-      { animations: animations }
-    );
-  });
-
-  // container.add(option);
 
   return container;
 }
