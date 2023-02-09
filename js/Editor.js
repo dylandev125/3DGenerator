@@ -9,7 +9,7 @@ import { Selector } from "./Viewport.Selector.js";
 
 var _DEFAULT_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.01, 1000);
 _DEFAULT_CAMERA.name = "Camera";
-_DEFAULT_CAMERA.position.set(130, 70, 140);
+_DEFAULT_CAMERA.position.set(-130, 70, 140);
 _DEFAULT_CAMERA.lookAt(new THREE.Vector3());
 
 _DEFAULT_CAMERA.position.normalize().multiplyScalar(15);

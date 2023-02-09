@@ -121,10 +121,24 @@ function MenubarMint(editor) {
 
     const canvas = document.getElementsByTagName("canvas");
     var strMime = "image/jpeg";
-    var imgData = canvas[0].toDataURL(strMime);
 
-    const nftImage = document.getElementsByClassName("nft-image");
-    nftImage[0].src = imgData;
+    var imgData = canvas[0].toDataURL(strMime);
+    const imgWidth = canvas[0].width;
+    const imgHeight = canvas[0].height;
+
+    let cropImage;
+    const newImg = new Image();
+    newImg.src = imgData;
+
+    newImg.onload = function() {
+      if (imgWidth > imgHeight) {
+        cropImage = crop(newImg, (imgWidth - imgHeight)/2, 0, imgHeight, imgHeight);
+      }
+      else {
+        cropImage = crop(newImg, 0, (imgHeight - imgWidth)/2, imgWidth, imgWidth);
+      }
+    };
+
     const ethereum = window?.ethereum;
     await ethereum.request({
       method: "wallet_switchEthereumChain",
@@ -132,7 +146,7 @@ function MenubarMint(editor) {
     });
 
     signals.mintLoading.dispatch(true);
-    const imgBlob = await base2blob(imgData);
+    const imgBlob = await base2blob(cropImage);
     const hash = await uploadFile(imgBlob, "1.jpg");
 
     const scene = editor.scene;
@@ -355,6 +369,22 @@ function MenubarMint(editor) {
     }
   };
 
+  function crop(image, x, y, width, height) {
+    // create a canvas
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+  
+    // set canvas size
+    canvas.width = width;
+    canvas.height = height;
+  
+    // draw the image
+    ctx.drawImage(image, x, y, width, height, 0, 0, width, height);
+  
+    // return the data url
+    return canvas.toDataURL();
+  }
+
   option.onClick(async function () {
     if (!editor.model) {
       alert("Please select the car model.");
@@ -367,19 +397,38 @@ function MenubarMint(editor) {
 
     var _DEFAULT_CAMERA = new THREE.PerspectiveCamera(50, 1, 0.01, 1000);
     _DEFAULT_CAMERA.name = "Camera";
-    _DEFAULT_CAMERA.position.set(130, 70, 140);
+    _DEFAULT_CAMERA.position.set(-130, 70, 140);
     _DEFAULT_CAMERA.lookAt(new THREE.Vector3());
-    _DEFAULT_CAMERA.position.normalize().multiplyScalar(15);
+    _DEFAULT_CAMERA.position.normalize().multiplyScalar(7.5);
 
     editor.camera.copy(_DEFAULT_CAMERA);
+    signals.cameraResetted.dispatch();
 
-    const canvas = document.getElementsByTagName("canvas");
-    var strMime = "image/jpeg";
+    setTimeout(() => {
+      const canvas = document.getElementsByTagName("canvas");
+      var strMime = "image/jpeg";
+  
+      var imgData = canvas[0].toDataURL(strMime);
+      const imgWidth = canvas[0].width;
+      const imgHeight = canvas[0].height;
 
-    var imgData = canvas[0].toDataURL(strMime);
+      const nftImage = document.getElementsByClassName("nft-image");
 
-    const nftImage = document.getElementsByClassName("nft-image");
-    nftImage[0].src = imgData;
+      let cropImage;
+      const newImg = new Image();
+      newImg.src = imgData;
+
+      newImg.onload = function() {
+        if (imgWidth > imgHeight) {
+          cropImage = crop(newImg, (imgWidth - imgHeight)/2, 0, imgHeight, imgHeight);
+        }
+        else {
+          cropImage = crop(newImg, 0, (imgHeight - imgWidth)/2, imgWidth, imgWidth);
+        }
+        nftImage[0].src = cropImage;
+      };
+
+    }, "500")
 
     const mintModal = document.getElementsByClassName("mint-modal");
     const overlay = document.getElementsByClassName("img-container");
