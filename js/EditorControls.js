@@ -86,8 +86,6 @@ class EditorControls extends THREE.EventDispatcher {
 
       object.position.add( delta );
 
-      console.log(object.position);
-
       scope.dispatchEvent( changeEvent );
     };
 

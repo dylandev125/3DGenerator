@@ -505,7 +505,6 @@ Editor.prototype = {
 
     this.history.fromJSON(json.history);
     this.scripts = json.scripts;
-    console.log(json.scene);
     this.setScene(await loader.parseAsync(json.scene));
     this.model = json.model;
   },
