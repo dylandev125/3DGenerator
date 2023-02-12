@@ -631,7 +631,7 @@ select {
 	background: #eee;
 	overflow: auto;
 	background-color: #27127A;
-	border: 2px solid gray;
+	border-left: 2px solid rgb(51, 23, 204);
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
