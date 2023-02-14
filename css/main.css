@@ -398,8 +398,7 @@ select {
 
 .nft-image {
 	width: 300px;
-	border-radius: 10px;
-	border: 1px solid #D040FF;
+	border-radius: 20px;
 }
 
 	#viewport #info {

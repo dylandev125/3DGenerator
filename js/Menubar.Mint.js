@@ -385,6 +385,27 @@ function MenubarMint(editor) {
     return canvas.toDataURL();
   }
 
+  function resize(image, logo) {
+    const canvas = document.createElement("canvas");
+    const ctx = canvas.getContext("2d");
+
+    // Set width and height
+    canvas.width = 500;
+    canvas.height = 500;
+
+    ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(logo, 0, 0, canvas.width, canvas.height);
+    return canvas.toDataURL();
+
+    // logo.onload = function() {
+    //   ctx.drawImage(logo, 0, 0, canvas.width, canvas.height);
+    // }
+
+    // console.log(canvas.toDataURL())
+    
+
+  }
+
   option.onClick(async function () {
     if (!editor.model) {
       alert("Please select the car model.");
@@ -399,18 +420,19 @@ function MenubarMint(editor) {
     _DEFAULT_CAMERA.name = "Camera";
     _DEFAULT_CAMERA.position.set(-130, 70, 140);
     _DEFAULT_CAMERA.lookAt(new THREE.Vector3());
-    _DEFAULT_CAMERA.position.normalize().multiplyScalar(7.5);
+    _DEFAULT_CAMERA.position.normalize().multiplyScalar(6);
 
     editor.camera.copy(_DEFAULT_CAMERA);
     signals.cameraResetted.dispatch();
 
+    const canvas = document.getElementsByTagName("canvas");
+    var strMime = "image/jpeg";
+    const imgWidth = canvas[0].width;
+    const imgHeight = canvas[0].height;
+    
     setTimeout(() => {
-      const canvas = document.getElementsByTagName("canvas");
-      var strMime = "image/jpeg";
-  
+
       var imgData = canvas[0].toDataURL(strMime);
-      const imgWidth = canvas[0].width;
-      const imgHeight = canvas[0].height;
 
       const nftImage = document.getElementsByClassName("nft-image");
 
@@ -425,8 +447,21 @@ function MenubarMint(editor) {
         else {
           cropImage = crop(newImg, 0, (imgHeight - imgWidth)/2, imgWidth, imgWidth);
         }
-        nftImage[0].src = cropImage;
+        const imgCrop = new Image();
+        imgCrop.src = cropImage;
+
+        const logo = new Image();
+        logo.src = "../assets/images/nftlogo.png";
+
+        imgCrop.onload = function() {
+          logo.onload = function () {
+            const resultImage = resize(imgCrop, logo);
+            console.log(resultImage)
+            nftImage[0].src = resultImage;            
+          }
+        }
       };
+
 
     }, "500")
 
