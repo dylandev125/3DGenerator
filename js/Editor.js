@@ -128,6 +128,7 @@ function Editor() {
 
   this.addCamera(this.camera);
   this.model = "";
+  this.size = "";
 }
 
 Editor.prototype = {

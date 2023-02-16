@@ -407,6 +407,7 @@ function MenubarMint(editor) {
   }
 
   option.onClick(async function () {
+    const size = editor.size;
     if (!editor.model) {
       alert("Please select the car model.");
 
@@ -420,8 +421,13 @@ function MenubarMint(editor) {
     _DEFAULT_CAMERA.name = "Camera";
     _DEFAULT_CAMERA.position.set(-130, 70, 140);
     _DEFAULT_CAMERA.lookAt(new THREE.Vector3());
-    _DEFAULT_CAMERA.position.normalize().multiplyScalar(6);
 
+    let multiplyIndex;
+    if (size === "medium") multiplyIndex = 6.5;
+    else if (size === "large") multiplyIndex = 8;
+    else if (size === "small") multiplyIndex = 5.5;
+
+    _DEFAULT_CAMERA.position.normalize().multiplyScalar(multiplyIndex);
     editor.camera.copy(_DEFAULT_CAMERA);
     signals.cameraResetted.dispatch();
 
@@ -456,7 +462,6 @@ function MenubarMint(editor) {
         imgCrop.onload = function() {
           logo.onload = function () {
             const resultImage = resize(imgCrop, logo);
-            console.log(resultImage)
             nftImage[0].src = resultImage;            
           }
         }
