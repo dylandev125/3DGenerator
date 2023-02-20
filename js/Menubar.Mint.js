@@ -424,8 +424,9 @@ function MenubarMint(editor) {
 
     let multiplyIndex;
     if (size === "medium") multiplyIndex = 6.5;
-    else if (size === "large") multiplyIndex = 8;
-    else if (size === "small") multiplyIndex = 5.5;
+    else if (size === "large") multiplyIndex = 8.3;
+    else if (size === "small") multiplyIndex = 5.8;
+    else multiplyIndex = 6.5;
 
     _DEFAULT_CAMERA.position.normalize().multiplyScalar(multiplyIndex);
     editor.camera.copy(_DEFAULT_CAMERA);
@@ -447,11 +448,11 @@ function MenubarMint(editor) {
       newImg.src = imgData;
 
       newImg.onload = function() {
-        if (imgWidth > imgHeight) {
-          cropImage = crop(newImg, (imgWidth - imgHeight)/2, 0, imgHeight, imgHeight);
+        if (imgWidth > imgHeight * 0.9) {
+          cropImage = crop(newImg, (imgWidth - imgHeight * 0.9)/2, 0, imgHeight * 0.9, imgHeight * 0.9);
         }
         else {
-          cropImage = crop(newImg, 0, (imgHeight - imgWidth)/2, imgWidth, imgWidth);
+          cropImage = crop(newImg, 0, (imgHeight * 0.9 - imgWidth)/2, imgWidth, imgWidth);
         }
         const imgCrop = new Image();
         imgCrop.src = cropImage;
