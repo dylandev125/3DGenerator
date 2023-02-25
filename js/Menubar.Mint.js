@@ -7,9 +7,9 @@ const NFTAddress = "0x8c7143774385C4E8e1368c1d9667f21A9aBbf880";
 const tokenAddress = "0xE50ec3Bb6638bc4acEBAdC801F5be41961804a5b";
 const feeAddress = "0x14433D857e50671031687d76f5384cC7e7E7a845";
 const pinataApiEndpoint = "https://api.pinata.cloud/pinning/pinFileToIPFS";
-const pinataApiKey = "07b6548b8269be7da4de";
+const pinataApiKey = "fdd18548955e6c02a604";
 const pinataSecret =
-  "9ba00e678abb79229cf7bafe0f98c9ab9b0aa9b733e04886bfa7e41a5b56efb1";
+  "9c0195509a675f7c36725190bbf7017ee7808b8501b098e2169fbebc6439e21d";
 
 // const horsePower = Math.random();
 // const aeroDynamics = Math.random();
