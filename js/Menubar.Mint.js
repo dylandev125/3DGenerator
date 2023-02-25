@@ -119,25 +119,8 @@ function MenubarMint(editor) {
   const handleMint = async () => {
     const randomNumber = new Date().getTime().toString();
 
-    const canvas = document.getElementsByTagName("canvas");
-    var strMime = "image/jpeg";
-
-    var imgData = canvas[0].toDataURL(strMime);
-    const imgWidth = canvas[0].width;
-    const imgHeight = canvas[0].height;
-
-    let cropImage;
-    const newImg = new Image();
-    newImg.src = imgData;
-
-    newImg.onload = function() {
-      if (imgWidth > imgHeight) {
-        cropImage = crop(newImg, (imgWidth - imgHeight)/2, 0, imgHeight, imgHeight);
-      }
-      else {
-        cropImage = crop(newImg, 0, (imgHeight - imgWidth)/2, imgWidth, imgWidth);
-      }
-    };
+    const nftImage = document.getElementsByClassName("nft-image");
+    const imgSRC = nftImage[0].src;
 
     const ethereum = window?.ethereum;
     await ethereum.request({
@@ -146,7 +129,7 @@ function MenubarMint(editor) {
     });
 
     signals.mintLoading.dispatch(true);
-    const imgBlob = await base2blob(cropImage);
+    const imgBlob = await base2blob(imgSRC);
     const hash = await uploadFile(imgBlob, "1.jpg");
 
     const scene = editor.scene;
