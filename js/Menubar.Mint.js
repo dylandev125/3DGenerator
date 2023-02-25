@@ -227,7 +227,7 @@ function MenubarMint(editor) {
             formData.append("id", randomNumber);
 
             axios
-              .post("https://notify.croozenft.io/v1/s3upload", formData, {
+              .post("https://devnotify.croozenft.io/v1/s3upload", formData, {
                 headers: {
                   "Content-Type": `multipart/form-data`,
                 },
