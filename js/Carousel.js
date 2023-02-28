@@ -6,7 +6,7 @@ import { AddObjectCommand } from "./commands/AddObjectCommand.js";
 const modelData = [
   {
     name: "Eagle",
-    price: 10,
+    price: 50,
     fileName: "Mustang_69_05.gltf",
     imgName: "Mustang_69_05_Thumbnail_comp.png",
     size: "medium",
@@ -235,9 +235,9 @@ function Carousel(editor) {
     const priceItem = document.createElement("div");
     priceItem.className = "price-container";
     const crzImg = document.createElement("img");
-    crzImg.src = "./assets/images/crz.svg";
+    crzImg.src = "./assets/images/usd.png";
     const priceView = document.createElement("span");
-    priceView.textContent = modelData[i].price + " CRZ";
+    priceView.textContent = modelData[i].price + " USD";
     priceView.className = "price-view";
     priceItem.append(crzImg);
     priceItem.append(priceView);

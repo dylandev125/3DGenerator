@@ -109,6 +109,7 @@
       import { Resizer } from "./js/Resizer.js";
       import { VRButton } from "three/addons/webxr/VRButton.js";
       import { Carousel } from "./js/Carousel.js";
+      import { UISelect } from "./js/libs/ui.js";
 
       window.URL = window.URL || window.webkitURL;
       window.BlobBuilder =
@@ -166,6 +167,23 @@
       nftImage.classList.add("nft-image");
       mintModal.appendChild(nftImage);
 
+      const tokenSelection = document.createElement("div");
+      tokenSelection.classList.add("tokenSelect-container");
+
+      const titleToken = document.createElement("span");
+      titleToken.classList.add("text-white");
+      titleToken.textContent = "Purchase By:";
+
+      const wheelDropdown = new UISelect();
+      wheelDropdown.setClass("custom-dropdown custom-token-dropdown");
+      wheelDropdown.setId("wheel_select");
+      const options = ["Matic", "USDC", "USDT"];
+      wheelDropdown.setOptions(options);
+      wheelDropdown.setValue(0);
+
+      tokenSelection.append(titleToken);
+      tokenSelection.append(wheelDropdown.dom);
+
       const mintBtn = document.createElement("button");
       mintBtn.className = "btn-mint custom-button";
       mintBtn.id = "mint_nft";
@@ -183,6 +201,7 @@
 
       dashboardLink.textContent = "Go to dashboard";
 
+      mintModal.appendChild(tokenSelection);
       mintModal.appendChild(spinner);
       mintModal.appendChild(mintBtn);
       mintModal.appendChild(dashboardLink);

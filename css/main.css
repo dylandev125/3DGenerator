@@ -432,9 +432,11 @@ select {
 	display: flex;
 	gap: 5px;
 	justify-content: center;
+	align-items: center;
 }
 	.price-container img {
-		width: 16px;
+		width: 20px;
+		height: 20px;
 	}
 	
 	.price-container .price-view {
@@ -858,6 +860,7 @@ select {
 
 .text-white {
 	color: white;
+	font-size: 16px;
 }
 
 .toggle {
@@ -1005,11 +1008,16 @@ select {
 	font-weight: bold;
 }
 
+.custom-token-dropdown {	
+	border-left: none;
+	width: 70px;
+	height: 20px;
+}
+
 /* Absolute Center Spinner */
 .loading {
 	position: absolute;
 	z-index: 999;
-	overflow: show;
 	left: calc(50% - 5px);
 	bottom: 67px;
 	visibility: hidden;
@@ -1025,7 +1033,11 @@ select {
 	border: 0;
   }
   
-
+  .tokenSelect-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+  }
   
   /* Animation */
   
