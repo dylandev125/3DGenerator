@@ -279,11 +279,27 @@ function MenubarMint(editor) {
       animation_url: location,
     };
 
+    axios
+      .post("https://devnotify.croozenft.io/v1/game/addmeta", metadataBody, {
+        headers: {
+          "Content-Type": `application/json`,
+        },
+      })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((err) => {
+        // signals.mintLoading.dispatch(false);
+        console.log(err);
+        return;
+      });
+
     const metadataBlob = new Blob([JSON.stringify(metadataBody, null, 2)], {
       type: "text/plain",
     });
     const metadataHash = await uploadFile(metadataBlob, "1.json");
     const tokenURI = infuraIpfsGateway + metadataHash;
+    
 
     if (window.ethereum) {
       await window.ethereum.enable();
