@@ -249,7 +249,7 @@ function MenubarMint(editor) {
     const metadataBody = {
       name: editor.model + " #" + randomNumber.slice(-6),
       image: infuraIpfsGateway + hash,
-      description: "Race your NFT to earn crypto at CroozeNFT.io",
+      description: "Race your NFT to win cash prizes at CroozeNFT.io!",
       attributes: [
         {
           display_type: "number",
@@ -279,14 +279,15 @@ function MenubarMint(editor) {
       animation_url: location,
     };
 
+    let returnId;
     axios
       .post("https://devnotify.croozenft.io/v1/game/addmeta", metadataBody, {
         headers: {
           "Content-Type": `application/json`,
         },
       })
-      .then((response) => {
-        console.log(response)
+      .then((res) => {
+        returnId = res.data.id;
       })
       .catch((err) => {
         // signals.mintLoading.dispatch(false);
@@ -341,7 +342,8 @@ function MenubarMint(editor) {
         const transaction = await NFTContract.mint(address, tokenURI);
         const promise = await transaction.wait();
         const events = promise.events;
-        tokenId = parseInt(events[0].args.tokenId._hex, 16);
+        const tokenId = parseInt(events[0].args.tokenId._hex, 16);
+
       } catch (err) {
         console.log(err);
         signals.mintLoading.dispatch(false);
@@ -364,6 +366,19 @@ function MenubarMint(editor) {
         });
         */
 
+        var img_container = document.getElementsByClassName("img-container");
+        const image = document.getElementsByClassName("img-class");
+  
+        if (img_container[0]) {
+          img_container[0].addEventListener("click", function () {
+            img_container[0].style.display = "none";
+            image[0].style.display = "none";
+            mintModal.style.display = "none";
+  
+            signals.showGridChanged.dispatch(true);
+            signals.showHelpersChanged.dispatch(true);
+          });
+        }
       signals.mintLoading.dispatch(false);
     }
   };
