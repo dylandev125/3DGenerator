@@ -366,19 +366,11 @@ function MenubarMint(editor) {
         });
         */
 
-        var img_container = document.getElementsByClassName("img-container");
-        const image = document.getElementsByClassName("img-class");
-  
-        if (img_container[0]) {
-          img_container[0].addEventListener("click", function () {
-            img_container[0].style.display = "none";
-            image[0].style.display = "none";
-            mintModal.style.display = "none";
-  
-            signals.showGridChanged.dispatch(true);
-            signals.showHelpersChanged.dispatch(true);
-          });
-        }
+        const mintModal = document.getElementsByClassName("mint-modal");
+        const overlay = document.getElementsByClassName("img-container");
+        mintModal[0].style.display = "flex";
+        overlay[0].style.display = "block";
+        
       signals.mintLoading.dispatch(false);
     }
   };
