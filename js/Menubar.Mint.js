@@ -344,6 +344,25 @@ function MenubarMint(editor) {
         const events = promise.events;
         const tokenId = parseInt(events[0].args.tokenId._hex, 16);
 
+        const body = {
+          nftId: tokenId
+        }
+
+        axios
+        .post("https://devnotify.croozenft.io/v1/game/metadata/" + returnId, body, {
+          headers: {
+            "Content-Type": `application/json`,
+          },
+        })
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          signals.mintLoading.dispatch(false);
+          console.log(err);
+          return;
+        });
+
       } catch (err) {
         console.log(err);
         signals.mintLoading.dispatch(false);
@@ -402,14 +421,6 @@ function MenubarMint(editor) {
     ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
     ctx.drawImage(logo, 0, 0, canvas.width, canvas.height);
     return canvas.toDataURL();
-
-    // logo.onload = function() {
-    //   ctx.drawImage(logo, 0, 0, canvas.width, canvas.height);
-    // }
-
-    // console.log(canvas.toDataURL())
-    
-
   }
 
   option.onClick(async function () {
