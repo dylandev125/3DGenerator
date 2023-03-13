@@ -279,8 +279,8 @@ function MenubarMint(editor) {
       animation_url: location,
     };
 
-    let returnId;
-    returnId = await axios
+    let returnIdRes;
+    returnIdRes = await axios
       .post("https://devnotify.croozenft.io/v1/game/addmeta", metadataBody, {
         headers: {
           "Content-Type": `application/json`,
@@ -341,7 +341,7 @@ function MenubarMint(editor) {
         }
 
         axios
-        .post("https://devnotify.croozenft.io/v1/game/metadata/" + returnId, body, {
+        .post("https://devnotify.croozenft.io/v1/game/metadata/" + returnIdRes.data.data.id, body, {
           headers: {
             "Content-Type": `application/json`,
           },
