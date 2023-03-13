@@ -280,19 +280,11 @@ function MenubarMint(editor) {
     };
 
     let returnId;
-    axios
+    returnId = await axios
       .post("https://devnotify.croozenft.io/v1/game/addmeta", metadataBody, {
         headers: {
           "Content-Type": `application/json`,
         },
-      })
-      .then((res) => {
-        returnId = res.data.id;
-      })
-      .catch((err) => {
-        // signals.mintLoading.dispatch(false);
-        console.log(err);
-        return;
       });
 
     const metadataBlob = new Blob([JSON.stringify(metadataBody, null, 2)], {
