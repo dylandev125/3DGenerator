@@ -266,15 +266,11 @@ function Carousel(editor) {
       
       editor.clear();
 
-      let color = 0xffffff;
-      const intensity = 1;
-
       let light = new THREE.DirectionalLight(0xA5CBFD, 0.34);
       light.name = "DirectionalLight";
       light.target.name = "DirectionalLight Target";
 
       light.position.set(5, 10, 7.5);
-      // light.castShadow = true;
 
       editor.execute(new AddObjectCommand(editor, light));
 

@@ -340,7 +340,7 @@ function MenubarMint(editor) {
           nftId: tokenId
         }
 
-        axios
+        await axios
         .post("https://devnotify.croozenft.io/v1/game/metadata/" + returnIdRes.data.data.id, body, {
           headers: {
             "Content-Type": `application/json`,
@@ -379,8 +379,8 @@ function MenubarMint(editor) {
 
         const mintModal = document.getElementsByClassName("mint-modal");
         const overlay = document.getElementsByClassName("img-container");
-        mintModal[0].style.display = "flex";
-        overlay[0].style.display = "block";
+        mintModal[0].style.display = "none";
+        overlay[0].style.display = "none";
         
       signals.mintLoading.dispatch(false);
     }
