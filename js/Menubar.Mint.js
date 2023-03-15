@@ -1,29 +1,31 @@
 import { UIPanel, UIRow } from "./libs/ui.js";
 import ERC721ABI from "../abi/NFT.json" assert { type: "json" };
-import CRZABI from "../abi/token.json" assert { type: "json" };
+import USDTABI from "../abi/usdt.json" assert { type: "json" };
+import USDCABI from "../abi/usdc.json" assert { type: "json" };
 
 const infuraIpfsGateway = "https://crooze.infura-ipfs.io/ipfs/";
-const NFTAddress = "0x8c7143774385C4E8e1368c1d9667f21A9aBbf880";
-const tokenAddress = "0xE50ec3Bb6638bc4acEBAdC801F5be41961804a5b";
-const feeAddress = "0x14433D857e50671031687d76f5384cC7e7E7a845";
+const NFTAddress = "0x8AAf154304D1aB7873ac1033E08135Cb4A086338";
 const pinataApiEndpoint = "https://api.pinata.cloud/pinning/pinFileToIPFS";
 const pinataApiKey = "fdd18548955e6c02a604";
 const pinataSecret =
   "9c0195509a675f7c36725190bbf7017ee7808b8501b098e2169fbebc6439e21d";
 
-// const horsePower = Math.random();
-// const aeroDynamics = Math.random();
-// const airResistance = Math.random();
-// const boostForces = Math.random();
-// const traction = Math.random();
-// const drift = Math.random();
-// const magnetForce = Math.random();
-// const torque = Math.random();
-// const friction = Math.random();
-// const mass = Math.random();
-// const slipperiness = Math.random();
-// const suspensionStiffness = Math.random();
-// const rarity = Math.floor(Math.random() * 100);
+const tokenAddress = [
+  "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
+  "0xc2132d05d31c914a87c6611c10748aeb04b58e8f"
+]
+
+const tokenABI = [
+  USDCABI,
+  USDTABI
+]
+
+const tokenSymbol = [
+  "USDC",
+  "USDT"
+]
+
+const mintPrice = 1 * 10;
 
 const base2blob = (b64) =>
   new Promise((resolve, reject) => {
@@ -117,8 +119,9 @@ function MenubarMint(editor) {
   });
 
   const handleMint = async () => {
+    const tokenTypeDom = document.getElementById("token_select");
+    const tokenType = tokenTypeDom.value;
     const randomNumber = new Date().getTime().toString();
-
     const nftImage = document.getElementsByClassName("nft-image");
     const imgSRC = nftImage[0].src;
 
@@ -217,9 +220,6 @@ function MenubarMint(editor) {
               })
               .then((response) => {
                 resolve(response.data.location);
-                //  const linkTo = document.getElementById("Dashboard_link");
-                //  linkTo.style.display = "block";
-                //  linkTo.href = "https://crooze-dashboard.netlify.app";
               })
               .catch((err) => {
                 signals.mintLoading.dispatch(false);
@@ -293,8 +293,8 @@ function MenubarMint(editor) {
     const metadataHash = await uploadFile(metadataBlob, "1.json");
     const tokenURI = infuraIpfsGateway + metadataHash;
     
-
     if (window.ethereum) {
+
       await window.ethereum.enable();
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
@@ -302,36 +302,41 @@ function MenubarMint(editor) {
 
       const NFTContract = new ethers.Contract(
         NFTAddress,
-        ERC721ABI.abi,
+        ERC721ABI,
         signer
       );
       const tokenContract = new ethers.Contract(
-        tokenAddress,
-        CRZABI.abi,
+        tokenAddress[tokenType],
+        tokenABI[tokenType],
         signer
       );
+
       try {
         const balance = await tokenContract.balanceOf(address);
+        const allwance = await tokenContract.allowance(address, NFTAddress);
 
-        if (ethers.utils.formatEther(balance.toString()) < 10) {
+        if (ethers.utils.formatUnits(balance.toString(), 6) < 10) {
           Toastify({
-            text: "Insufficient CRZ amount",
+            text: "Insufficient " + tokenSymbol[tokenType] + " amount",
             duration: 3000,
-            destination: "https://github.com/apvarun/toastify-js",
             newWindow: true,
             close: true,
-            gravity: "top", // `top` or `bottom`
-            position: "left", // `left`, `center` or `right`
-            stopOnFocus: true, // Prevents dismissing of toast on hover
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
             style: {
-              background: "linear-gradient(to right, #00b09b, #96c93d)",
+              background: "linear-gradient(to right, #CC2222, #AA7777)",
             },
             onClick: function () {}, // Callback after click
           }).showToast();
           return;
         }
-        await tokenContract.transfer(feeAddress, ethers.utils.parseEther("10"));
-        const transaction = await NFTContract.mint(address, tokenURI);
+
+        if (ethers.utils.formatUnits(allwance.toString(), 6) < mintPrice / 10) {
+          await tokenContract.approve(NFTAddress, ethers.utils.parseUnits(mintPrice.toString(), 7));
+        }
+
+        const transaction = await NFTContract.generatorMint(address, "tokenURI", tokenAddress[tokenType], ethers.utils.parseUnits(mintPrice.toString(), 7));
         const promise = await transaction.wait();
         const events = promise.events;
         const tokenId = parseInt(events[0].args.tokenId._hex, 16);
@@ -360,22 +365,6 @@ function MenubarMint(editor) {
         signals.mintLoading.dispatch(false);
         return;
       }
-
-      /*
-        window.web3 = new Web3(window.ethereum);
-        await window.ethereum.enable();
-        const accounts = await web3.eth.requestAccounts();
-        const account = accounts[0];
-        const NFTContract = new web3.eth.Contract(ERC721ABI.abi, NFTAddress);
-
-        const extraData = await NFTContract.methods.mint(account, tokenURI);
-        const response = await web3.eth.sendTransaction({
-          from: account,
-          to: NFTAddress,
-          value: '0',
-          data: extraData.encodeABI()
-        });
-        */
 
         const mintModal = document.getElementsByClassName("mint-modal");
         const overlay = document.getElementsByClassName("img-container");

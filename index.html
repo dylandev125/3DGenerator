@@ -174,15 +174,15 @@
       titleToken.classList.add("text-white");
       titleToken.textContent = "Purchase By:";
 
-      const wheelDropdown = new UISelect();
-      wheelDropdown.setClass("custom-dropdown custom-token-dropdown");
-      wheelDropdown.setId("wheel_select");
-      const options = ["Matic", "USDC", "USDT"];
-      wheelDropdown.setOptions(options);
-      wheelDropdown.setValue(0);
+      const tokenDropdown = new UISelect();
+      tokenDropdown.setClass("custom-dropdown custom-token-dropdown");
+      tokenDropdown.setId("token_select");
+      const options = ["USDC", "USDT"];
+      tokenDropdown.setOptions(options);
+      tokenDropdown.setValue(0);
 
       tokenSelection.append(titleToken);
-      tokenSelection.append(wheelDropdown.dom);
+      tokenSelection.append(tokenDropdown.dom);
 
       const mintBtn = document.createElement("button");
       mintBtn.className = "btn-mint custom-button";
