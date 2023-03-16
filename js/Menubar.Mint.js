@@ -25,7 +25,7 @@ const tokenSymbol = [
   "USDT"
 ]
 
-const mintPrice = 1 * 10;
+const mintPrice = 1;
 
 const base2blob = (b64) =>
   new Promise((resolve, reject) => {
@@ -315,7 +315,7 @@ function MenubarMint(editor) {
         const balance = await tokenContract.balanceOf(address);
         const allwance = await tokenContract.allowance(address, NFTAddress);
 
-        if (ethers.utils.formatUnits(balance.toString(), 6) < 10) {
+        if (ethers.utils.formatUnits(balance.toString(), 6) < mintPrice) {
           Toastify({
             text: "Insufficient " + tokenSymbol[tokenType] + " amount",
             duration: 3000,
@@ -333,10 +333,10 @@ function MenubarMint(editor) {
         }
 
         if (ethers.utils.formatUnits(allwance.toString(), 6) < mintPrice / 10) {
-          await tokenContract.approve(NFTAddress, ethers.utils.parseUnits(mintPrice.toString(), 7));
+          await tokenContract.approve(NFTAddress, ethers.utils.parseUnits(mintPrice.toString(), 17));
         }
 
-        const transaction = await NFTContract.generatorMint(address, "tokenURI", tokenAddress[tokenType], ethers.utils.parseUnits(mintPrice.toString(), 7));
+        const transaction = await NFTContract.generatorMint(address, tokenURI, tokenAddress[tokenType], mintPrice);
         const promise = await transaction.wait();
         const events = promise.events;
         const tokenId = parseInt(events[0].args.tokenId._hex, 16);
