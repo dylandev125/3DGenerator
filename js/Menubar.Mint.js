@@ -332,33 +332,35 @@ function MenubarMint(editor) {
           return;
         }
 
-        if (ethers.utils.formatUnits(allwance.toString(), 6) < mintPrice / 10) {
-          await tokenContract.approve(NFTAddress, ethers.utils.parseUnits(mintPrice.toString(), 17));
+        if (ethers.utils.formatUnits(allwance.toString(), 6) < mintPrice ) {
+          await tokenContract.approve(NFTAddress, ethers.utils.parseUnits(mintPrice.toString(), 6));
         }
 
-        const transaction = await NFTContract.generatorMint(address, tokenURI, tokenAddress[tokenType], mintPrice);
-        const promise = await transaction.wait();
-        const events = promise.events;
-        const tokenId = parseInt(events[0].args.tokenId._hex, 16);
+        NFTContract.on("Transfer", async (from, to, amount, event) => {
+          if (from == '0x0000000000000000000000000000000000000000' && to === address){
+            const tokenId = parseInt(event.args.tokenId._hex, 16)
+            const body = {
+              nftId: tokenId
+            }
 
-        const body = {
-          nftId: tokenId
-        }
-
-        await axios
-        .post("https://devnotify.croozenft.io/v1/game/metadata/" + returnIdRes.data.data.id, body, {
-          headers: {
-            "Content-Type": `application/json`,
-          },
-        })
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((err) => {
-          signals.mintLoading.dispatch(false);
-          console.log(err);
-          return;
+            await axios
+            .post("https://devnotify.croozenft.io/v1/game/metadata/" + returnIdRes.data.data.id, body, {
+              headers: {
+                "Content-Type": `application/json`,
+              },
+            })
+            .then((res) => {
+              console.log(res);
+            })
+            .catch((err) => {
+              signals.mintLoading.dispatch(false);
+              console.log(err);
+              return;
+            });
+          }
         });
+
+        await NFTContract.generatorMint(address, "tokenURI", tokenAddress[tokenType], ethers.utils.parseUnits(mintPrice.toString(), 6));
 
       } catch (err) {
         console.log(err);
@@ -366,11 +368,10 @@ function MenubarMint(editor) {
         return;
       }
 
-        const mintModal = document.getElementsByClassName("mint-modal");
-        const overlay = document.getElementsByClassName("img-container");
-        mintModal[0].style.display = "none";
-        overlay[0].style.display = "none";
-        
+      const mintModal = document.getElementsByClassName("mint-modal");
+      const overlay = document.getElementsByClassName("img-container");
+      mintModal[0].style.display = "none";
+      overlay[0].style.display = "none";
       signals.mintLoading.dispatch(false);
     }
   };
