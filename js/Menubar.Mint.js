@@ -360,7 +360,7 @@ function MenubarMint(editor) {
           }
         });
 
-        await NFTContract.generatorMint(address, "tokenURI", tokenAddress[tokenType], ethers.utils.parseUnits(mintPrice.toString(), 6));
+        await NFTContract.generatorMint(address, tokenURI, tokenAddress[tokenType], ethers.utils.parseUnits(mintPrice.toString(), 6));
 
       } catch (err) {
         console.log(err);
