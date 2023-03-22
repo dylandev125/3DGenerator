@@ -8,7 +8,7 @@ const NFTAddress = "0x8AAf154304D1aB7873ac1033E08135Cb4A086338";
 const pinataApiEndpoint = "https://api.pinata.cloud/pinning/pinFileToIPFS";
 const pinataApiKey = "fdd18548955e6c02a604";
 const pinataSecret =
-  "9c0195509a675f7c36725190bbf7017ee7808b8501b098e2169fbebc6439e21d";
+  "";
 
 const tokenAddress = [
   "0x2791bca1f2de4661ed88a30c99a7a9449aa84174",
